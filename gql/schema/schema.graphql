@@ -5,6 +5,7 @@ schema {
 
 type Query {
     user(email: String!): User
+    users(page: Int!, limit: Int!): Users
 }
 
 type Mutation {
@@ -16,4 +17,15 @@ type User {
     email: String!
     firstName: String!
     lastName: String!
+}
+
+type PageInfo {
+    page: Int! 
+    limit: Int!
+}
+
+type Users {
+    totalCount: Int!
+    items: [User!]
+    pageInfo: PageInfo!
 }

@@ -16,14 +16,10 @@ var (
 )
 
 func TestSetRootSchema(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
 	sc, err := schema.GetRootSchema()
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	rootSchema = graphql.MustParseSchema(sc, &Resolver{})
 }
 
