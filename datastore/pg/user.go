@@ -85,6 +85,22 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 	}
 	defer smt.Close()
 
+	var (
+		totalCount int
+		errTotal   error
+		wgroup     sync.WaitGroup
+	)
+	wgroup.Add(1)
+	go func() {
+		totalCount, errTotal = repo.GetCount()
+		wgroup.Done()
+	}()
+	wgroup.Wait()
+
+	if errTotal != nil {
+		return nil, err
+	}
+
 	offset := (args.Limit * (args.Page - 1))
 	rows, err := smt.Query(args.Limit, offset)
 	if err != nil {
@@ -109,11 +125,6 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 			FirstName: firstName,
 			LastName:  lastName,
 		})
-	}
-
-	totalCount, err := repo.GetCount()
-	if err != nil {
-		return nil, err
 	}
 
 	UserInfo := model.Users{
