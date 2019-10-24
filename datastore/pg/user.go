@@ -91,10 +91,10 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 		wgroup     sync.WaitGroup
 	)
 	wgroup.Add(1)
-	go func() {
+	go func(wg *sync.WaitGroup) {
 		totalCount, errTotal = repo.GetCount()
-		wgroup.Done()
-	}()
+		wg.Done()
+	}(&wgroup)
 	wgroup.Wait()
 
 	if errTotal != nil {
