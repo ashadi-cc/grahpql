@@ -57,15 +57,28 @@ func (repo UserRepo) Create(user *model.User) error {
 	return nil
 }
 
+//GetCount get total record
+func (repo UserRepo) GetCount() (int, error) {
+	var totalRecord int
+	sqlStatement := "SELECT COUNT(id) AS total FROM USERS"
+	smt, err := GetInstance().Prepare(sqlStatement)
+	if err != nil {
+		return totalRecord, errors.Wrapf(err, "problem when preparing query :%s", sqlStatement)
+	}
+	defer smt.Close()
+
+	if err := smt.QueryRow().Scan(&totalRecord); err != nil {
+		return totalRecord, errors.Wrap(err, "problem scan row")
+	}
+	return totalRecord, nil
+}
+
 //GetUsers get user with limit and page
 func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 	if args.Page <= 0 || args.Limit <= 0 {
 		return nil, fmt.Errorf("Limit and page could not 0 %+v", args)
 	}
-	sqlStatement := "SELECT id,email,first_name,last_name FROM users Order by created_at"
-	sqlStatement = fmt.Sprintf(`WITH cte AS (%s) SELECT * FROM (TABLE cte LIMIT $1 OFFSET $2)
-	SUB RIGHT JOIN (SELECT count(*) FROM cte) c(full_count) ON true
-	WHERE $3 < full_count `, sqlStatement)
+	sqlStatement := "SELECT id,email,first_name,last_name FROM users Order by created_at LIMIT $1 OFFSET $2"
 
 	smt, err := GetInstance().Prepare(sqlStatement)
 	if err != nil {
@@ -74,21 +87,21 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 	defer smt.Close()
 
 	offset := (args.Limit * (args.Page - 1))
-	rows, err := smt.Query(args.Limit, offset, offset)
+	rows, err := smt.Query(args.Limit, offset)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed when query users")
 	}
+	defer rows.Close()
 
 	users := make([]*model.User, 0)
 	var (
-		UserID     string
-		email      string
-		firstName  string
-		lastName   string
-		totalCount int
+		UserID    string
+		email     string
+		firstName string
+		lastName  string
 	)
 	for rows.Next() {
-		if err := rows.Scan(&UserID, &email, &firstName, &lastName, &totalCount); err != nil {
+		if err := rows.Scan(&UserID, &email, &firstName, &lastName); err != nil {
 			return nil, errors.Wrap(err, "error when scan row")
 		}
 		users = append(users, &model.User{
@@ -97,6 +110,11 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 			FirstName: firstName,
 			LastName:  lastName,
 		})
+	}
+
+	totalCount, err := repo.GetCount()
+	if err != nil {
+		return nil, err
 	}
 
 	UserInfo := model.Users{

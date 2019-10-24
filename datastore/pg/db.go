@@ -45,6 +45,8 @@ func connectDB() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	db.SetMaxOpenConns(5)
 	return db, nil
 }
 

@@ -24,9 +24,9 @@ func TestSetRootSchema(t *testing.T) {
 }
 
 func TestUserQuery(t *testing.T) {
-	if testing.Short() {
-		t.Skip()
-	}
+	// if testing.Short() {
+	t.Skip()
+	// }
 	gqltesting.RunTests(t, []*gqltesting.Test{
 		{
 			Context: ctx,
