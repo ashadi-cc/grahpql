@@ -22,5 +22,14 @@ services:
     ports: 
       - "3001:80"
 
+  code:
+    image: codercom/code-server:v2
+    ports:
+      - "3030:8080"
+    volumes:
+      #- "./:/home/coder/.local/share/code-server"
+      - "./:/home/coder/project"
+
+
 volumes: 
   grahpql:

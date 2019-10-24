@@ -78,8 +78,7 @@ func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 	if args.Page <= 0 || args.Limit <= 0 {
 		return nil, fmt.Errorf("Limit and page could not 0 %+v", args)
 	}
-	sqlStatement := "SELECT id,email,first_name,last_name FROM users Order by created_at LIMIT $1 OFFSET $2"
-
+	sqlStatement := "SELECT id,email,first_name,last_name FROM users ORDER BY created_at LIMIT $1 OFFSET $2"
 	smt, err := GetInstance().Prepare(sqlStatement)
 	if err != nil {
 		return nil, errors.Wrapf(err, "problem when preparing query :%s", sqlStatement)

@@ -1,6 +1,8 @@
 package resolver
 
-import "gql-ashadi/model"
+import (
+	"gql-ashadi/model"
+)
 
 //PageInfoResolver page info resolver
 type PageInfoResolver struct {
