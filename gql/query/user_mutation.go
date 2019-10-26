@@ -14,7 +14,6 @@ func (r *Resolver) CreateUser(args struct {
 	FirstName string
 	LastName  string
 }) (*resolver.UserResolver, error) {
-	logger.GetLogger().Info("user created")
 	userModel := &model.User{
 		Email:     args.Email,
 		FirstName: args.FirstName,
@@ -22,7 +21,7 @@ func (r *Resolver) CreateUser(args struct {
 	}
 	var errResolver error
 	if err := user.GetService().Create(userModel); err != nil {
-		logger.GetLogger().Warning("unable to create user", err.Error())
+		logger.Warning("unable to create user", err.Error())
 		errResolver = fmt.Errorf("failed created user, duplicate email")
 	}
 	return resolver.NewUserResolver(userModel), errResolver

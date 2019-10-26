@@ -12,10 +12,10 @@ import (
 
 //SetupQueryRouter set query router
 func SetupQueryRouter(router *chi.Mux) {
-	logger.GetLogger().Info("setup query router")
+	logger.Info("setup query router")
 	s, err := schema.GetRootSchema()
 	if err != nil {
-		logger.GetLogger().Fatalf("reading schema error: %s", err.Error())
+		logger.Fatalf("reading schema error: %s", err.Error())
 	}
 	resolver := &query.Resolver{}
 	schema := graphql.MustParseSchema(s, resolver)

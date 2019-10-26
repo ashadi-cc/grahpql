@@ -12,7 +12,7 @@ import (
 )
 
 func InitServer() {
-	logger.GetLogger().Info("setup database connection")
+	logger.Info("setup database connection")
 	//setup database connection
 	pg.MustConnect()
 
@@ -20,8 +20,8 @@ func InitServer() {
 	routes := chi.NewRouter()
 	setupMiddleware(routes)
 	setupRouter(routes)
-	logger.GetLogger().Info("App running at port", config.GetConfig().AppPort)
-	logger.GetLogger().Fatal(http.ListenAndServe(config.GetConfig().AppPort, routes))
+	logger.Info("App running at port", config.GetConfig().AppPort)
+	logger.Fatal(http.ListenAndServe(config.GetConfig().AppPort, routes))
 }
 
 func setupRouter(rr *chi.Mux) {

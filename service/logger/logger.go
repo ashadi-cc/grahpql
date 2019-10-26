@@ -29,3 +29,27 @@ func GetLogger() *logging.Logger {
 
 	return logger
 }
+
+func Info(args ...interface{}) {
+	GetLogger().Info(args...)
+}
+
+func Warning(args ...interface{}) {
+	GetLogger().Warning(args...)
+}
+
+func Error(args ...interface{}) {
+	GetLogger().Error(args...)
+}
+
+func Fatal(args ...interface{}) {
+	GetLogger().Fatal(args...)
+}
+
+func Fatalf(format string, args ...interface{}) {
+	GetLogger().Fatalf(format, args...)
+}
+
+func Critical(args ...interface{}) {
+	GetLogger().Critical(args...)
+}

@@ -14,7 +14,7 @@ func (r *Resolver) User(args struct{ Email string }) (*resolver.UserResolver, er
 	var errResolver error
 	if err != nil {
 		errResolver = fmt.Errorf("email not found %s", args.Email)
-		logger.GetLogger().Info("get user by email error", err.Error())
+		logger.Info("get user by email error", err.Error())
 	}
 	return resolver.NewUserResolver(user), errResolver
 }
@@ -33,7 +33,7 @@ func (r *Resolver) Users(args struct {
 	var errResolver error
 	if err != nil {
 		errResolver = fmt.Errorf("errors when get users")
-		logger.GetLogger().Info("unable to get users", err.Error())
+		logger.Info("unable to get users", err.Error())
 	}
 	return resolver.NewUsersResolver(users), errResolver
 }

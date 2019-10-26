@@ -18,3 +18,6 @@ up:
 
 run:
 	go run cmd/server.go
+
+lint:
+	golangci-lint run -v -c ./.golangci.yml

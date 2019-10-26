@@ -19,7 +19,7 @@ func (h *GraphQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Variables     map[string]interface{} `json:"variables"`
 	}
 	if err := json.NewDecoder(r.Body).Decode(&params); err != nil {
-		logger.GetLogger().Info("error grahpql handler", err.Error())
+		logger.Info("error grahpql handler", err.Error())
 		http.Error(w, "must be provide query in request body", http.StatusBadRequest)
 		return
 	}
@@ -32,5 +32,5 @@ func (h *GraphQL) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(responseJSON)
+	_, _ = w.Write(responseJSON)
 }

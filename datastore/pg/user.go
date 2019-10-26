@@ -12,20 +12,20 @@ import (
 
 type UserRepo struct{}
 
-var userRepo UserRepo
+var userRepo *UserRepo
 var userInit sync.Once
 
 //GetUserRepo get instance repository
 func GetUserRepo() repository.User {
 	userInit.Do(func() {
-		userRepo = UserRepo{}
+		userRepo = &UserRepo{}
 	})
 
 	return userRepo
 }
 
 //GetByEmail get user by email
-func (repo UserRepo) GetByEmail(email string) (*model.User, error) {
+func (repo *UserRepo) GetByEmail(email string) (*model.User, error) {
 	sqlStatement := "Select id,email,first_name,last_name From users Where email = $1"
 	smt, err := GetInstance().Prepare(sqlStatement)
 	if err != nil {
@@ -42,7 +42,7 @@ func (repo UserRepo) GetByEmail(email string) (*model.User, error) {
 }
 
 //Create user
-func (repo UserRepo) Create(user *model.User) error {
+func (repo *UserRepo) Create(user *model.User) error {
 	user.ID = xid.New().String()
 	sqlStatement := "Insert into users (id,email,first_name,last_name) Values($1,$2,$3,$4)"
 	smt, err := GetInstance().Prepare(sqlStatement)
@@ -58,7 +58,7 @@ func (repo UserRepo) Create(user *model.User) error {
 }
 
 //GetCount get total record
-func (repo UserRepo) GetCount() (int, error) {
+func (repo *UserRepo) GetCount() (int, error) {
 	var totalRecord int
 	sqlStatement := "SELECT COUNT(id) AS total FROM USERS"
 	smt, err := GetInstance().Prepare(sqlStatement)
@@ -74,7 +74,7 @@ func (repo UserRepo) GetCount() (int, error) {
 }
 
 //GetUsers get user with limit and page
-func (repo UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
+func (repo *UserRepo) GetUsers(args model.PageInfo) (*model.Users, error) {
 	if args.Page <= 0 || args.Limit <= 0 {
 		return nil, fmt.Errorf("Limit and page could not 0 %+v", args)
 	}

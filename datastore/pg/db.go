@@ -30,7 +30,7 @@ func MustConnect() {
 	var err error
 	db, err = connectDB()
 	if err != nil {
-		logger.GetLogger().Fatal(err)
+		logger.Fatal(err)
 	}
 }
 
