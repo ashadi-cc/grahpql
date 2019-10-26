@@ -15,4 +15,5 @@ before_install:
   - chmod 600 ~/.netrc
 
 script:
+  - make lint
   - make test_unit
