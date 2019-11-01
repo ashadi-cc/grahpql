@@ -17,7 +17,7 @@ func TestGetUsers(t *testing.T) {
 		Page:  1,
 	}
 
-	_, err := GetUserRepo().GetUsers(args)
+	_, err := NewUser().GetUsers(args)
 	if err != nil {
 		t.Fatalf("error when get users: %s", err.Error())
 	}
@@ -34,7 +34,7 @@ func BenchmarkCreatUser(b *testing.B) {
 				FirstName: fmt.Sprintf("c%d@gmail.com", i),
 				LastName:  fmt.Sprintf("c%d@gmail.com", i),
 			}
-			err := GetUserRepo().Create(u)
+			err := NewUser().Create(u)
 			defer w.Done()
 			if err != nil {
 				log.Fatal(err)

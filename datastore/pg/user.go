@@ -12,16 +12,9 @@ import (
 
 type UserRepo struct{}
 
-var userRepo *UserRepo
-var userInit sync.Once
-
-//GetUserRepo get instance repository
-func GetUserRepo() repository.User {
-	userInit.Do(func() {
-		userRepo = &UserRepo{}
-	})
-
-	return userRepo
+//NewUser get instance repository
+func NewUser() repository.User {
+	return &UserRepo{}
 }
 
 //GetByEmail get user by email
